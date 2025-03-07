@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+    <title>Jogo das perguntas</title>
+</head>
+<body>
+
+    <!--Menu inicial  -->
+    <div id="quiz-container">
+        <h1>Quiz do Amor</h1>
+        <div id="menu">
+            <p>Quer jogar?</p>
+            <button onclick="startGame()">Jogar</button>
+            <button id="no-button" onmouseover="moveNoButton()">Não quero jogar</button>
+        </div>
+
+
+    <!--Perguntas -->
+        <div id="game" style="display: none;">
+            <p id="question"></p>
+            <div id="options"></div>
+            <p id="feedback"></p>
+        </div>
+    </div>
+
+</body>
+</html>
