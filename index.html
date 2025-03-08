@@ -4,29 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<!-- Redirecionamento Script e CSS -->
     <link rel="stylesheet" href="styles.css">
     <script src="script.js" defer></script>
-    <title>Jogo das perguntas</title>
+
+<!-- Links para fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Honk:SHLN@50.1&display=swap" rel="stylesheet">
+    
+    <title>Você conhece a Anne?</title>
 </head>
 <body>
-
-    <!--Menu inicial  -->
     <div id="quiz-container">
-        <h1>Quiz do Amor</h1>
         <div id="menu">
-            <p>Quer jogar?</p>
+            <div class="Titulo">
+                <img src="/img/BumbumPixel.gif" alt="Flowers" class="imgh1">
+                <h1>Quiz da Anne</h1>
+                <img src="/img/PugPixel.gif" alt="Flowers" class="imgh1">
+            </div>
+            <p>Será que você me conhece?</p>
             <button onclick="startGame()">Jogar</button>
-            <button id="no-button" onmouseover="moveNoButton()">Não quero jogar</button>
+            <button id="no-button" onclick="moveNoButton()">Não quero jogar</button>
         </div>
-
-
-    <!--Perguntas -->
         <div id="game" style="display: none;">
+            <h2 id="question-title"></h2>
             <p id="question"></p>
             <div id="options"></div>
             <p id="feedback"></p>
         </div>
     </div>
+    
+    <audio id="click-sound" src="MouseClick.mp3"></audio>
+    <audio id="correct-sound" src="LevelUpSound.mp3"></audio>
+    <audio id="wrong-sound" src="Game_Over_Click.mp3"></audio>
+    <audio id="typing-sound" src="typing.mp3"></audio>
+    <audio id="hover-sound" src="FantasyCorrect.mp3"></audio>
+
+
 
 </body>
 </html>

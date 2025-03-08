@@ -1,26 +1,73 @@
 body {
-    font-family: Arial, sans-serif;
     text-align: center;
     background-color: #ffe6e6;
+    background-image: url("https://i.pinimg.com/originals/ff/22/36/ff2236e2a40e5102820ea2e02ca53e35.gif");
+    background-size: cover;
+    background-attachment: fixed;
+}
+h1{
+    font-family: "Silkscreen", sans-serif;
+    font-size: 45px;
+    color: #8298D9;
+}
+.imgh1{
+    width: 100px;
+    object-fit: cover;
+}
+.Titulo{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+h2{
+    font-family: "Silkscreen", sans-serif;
+    font-size: 45px;
+    color: #8298D9;
+}
+p{
+    font-family: "Silkscreen", sans-serif;
+    font-size: 20px;
+    color: #BF9BB6;
 }
 #quiz-container {
     max-width: 600px;
     margin: 50px auto;
-    background: white;
+    background-color: white;
     padding: 20px;
     border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    border: solid;
+    border-color: cornflowerblue;
+    box-shadow: 3px 3px 3px 3px;
+    color: lightpink;
 }
 button {
     margin: 10px;
     padding: 10px;
     font-size: 16px;
     cursor: pointer;
-    background-color: #ff4d4d;
+    background-color: #F2B6BB;
     color: white;
     border: none;
     border-radius: 5px;
+    font-family: "Silkscreen", sans-serif;
 }
 #no-button {
     position: absolute;
 }
+
+/* CSS da fonte pixel */
+.silkscreen-regular {
+    font-family: "Silkscreen", sans-serif;
+    font-weight: 400;
+    font-style: normal;
+  }
+  /* CSS da fonte H1 */
+.honk {
+    font-family: "Honk", system-ui;
+    font-optical-sizing: auto;
+    font-weight: 400;
+    font-style: normal;
+    font-variation-settings:
+      "MORF" 15,
+      "SHLN" 50;
+  }
