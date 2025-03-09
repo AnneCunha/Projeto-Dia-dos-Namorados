@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image" href="img/EstrelaPixel.gif">
 
 <!-- Redirecionamento Script e CSS -->
     <link rel="stylesheet" href="styles.css">
@@ -14,6 +15,9 @@
     <link href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap" rel="stylesheet">
     <link href="https://fonts.googleapis.com/css2?family=Honk:SHLN@50.1&display=swap" rel="stylesheet">
     
+<!-- Elfsight Background Music | Untitled Background Music -->
+    <script src="https://static.elfsight.com/platform/platform.js" async></script>
+    <div class="elfsight-app-802708db-6d09-4547-ad41-172f52e7cb84" data-elfsight-app-lazy></div>
     <title>Você conhece a Anne?</title>
 </head>
 <body>
@@ -29,18 +33,21 @@
             <button id="no-button" onclick="moveNoButton()">Não quero jogar</button>
         </div>
         <div id="game" style="display: none;">
+            <div id="lives-container">❤️❤️❤️❤️</div>
             <h2 id="question-title"></h2>
             <p id="question"></p>
             <div id="options"></div>
             <p id="feedback"></p>
         </div>
     </div>
-    
+
     <audio id="click-sound" src="MouseClick.mp3"></audio>
     <audio id="correct-sound" src="LevelUpSound.mp3"></audio>
-    <audio id="wrong-sound" src="Game_Over_Click.mp3"></audio>
+    <audio id="wrong-sound" src="LoseLife.mp3"></audio>
     <audio id="typing-sound" src="typing.mp3"></audio>
-    <audio id="hover-sound" src="FantasyCorrect.mp3"></audio>
+    <audio id="hover-sound" src="SomBuble.mp3"></audio>
+    <audio id="game-over-sound" src="Game_Over_Click.mp3"></audio>
+
 
 
 
