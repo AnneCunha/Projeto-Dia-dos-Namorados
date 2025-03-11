@@ -55,7 +55,7 @@ function loadQuestion() {
     const optionsContainer = document.getElementById("options");
     optionsContainer.innerHTML = "";
 
-    questionElement.textContent = questionData.question;
+    typeQuestion(questionData.question);
     
     questionData.options.forEach(option => {
         const button = document.createElement("button");
@@ -70,6 +70,26 @@ function loadQuestion() {
         optionsContainer.appendChild(button);
     });
 }
+
+function typeQuestion(text, index = 0) {
+    const questionElement = document.getElementById("question");
+    const typingSound = document.getElementById("typing-sound");
+
+    if (index === 0) {
+        questionElement.textContent = ""; // Limpa o texto antes de começar
+        typingSound.play(); // Começa o som de digitação
+    }
+
+    if (index < text.length) {
+        questionElement.textContent += text[index];
+        setTimeout(() => typeQuestion(text, index + 1), 50); // Ajuste a velocidade se necessário
+    } else {
+        typingSound.pause(); // Para o som quando a digitação acabar
+        typingSound.currentTime = 0; // Reseta o áudio para o início
+    }
+}
+
+
 
 function updateLives() {
     const livesContainer = document.getElementById("lives-container");
@@ -126,17 +146,6 @@ function showPhaseCompletion() {
     `;
 }
 
-function initializeHangman() {
-    const phrase = "EU AMO MINHA NAMORADA MAIS DO QUE WARHAMMER";
-    let displayedWord = phrase.replace(/[A-ZÀ-Ú]/g, "_");
-    document.getElementById("word-display").textContent = displayedWord;
-    incorrectLetters = [];
-
-    const letterButtons = document.getElementById("letter-buttons");
-    letterButtons.innerHTML = "ABCDEFGHIJKLMNOPQRSTUVWXYZÁÉÍÓÚÃÕÊÇ".split("").map(letter => {
-        return `<button onclick="guessLetter('${letter}')">${letter}</button>`;
-    }).join(" ");
-}
 
 function startHangman() {
     document.getElementById("game").innerHTML = `
@@ -156,7 +165,7 @@ function startHangman() {
 
 
 function initializeHangman() {
-    const phrase = "EU AMO MINHA NAMORADA MAIS DO QUE WARHAMMER";
+    const phrase = "KAKTUS";
     let displayedWord = phrase.replace(/[A-ZÀ-Ú]/g, "_");
     document.getElementById("word-display").textContent = displayedWord;
     incorrectLetters = [];
@@ -171,7 +180,7 @@ function initializeHangman() {
 
 
 function guessLetter(letter) {
-    const phrase = "EU AMO MINHA NAMORADA MAIS DO QUE WARHAMMER";
+    const phrase = "KAKTUS";
     let displayedWord = document.getElementById("word-display").textContent;
     let updatedWord = "";
     let found = false;
@@ -234,6 +243,7 @@ function startNextPhase() {
 function goToMenu() {
     document.getElementById("menu").style.display = "block";
     document.getElementById("game").style.display = "none";
+    document.getElementById("game").innerHTML = ""; // Limpa o jogo para reiniciar
 
     // Resetar variáveis da fase 1
     currentQuestionIndex = 0;
