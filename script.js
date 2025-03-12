@@ -147,6 +147,10 @@ function showPhaseCompletion() {
 }
 
 
+
+
+
+// Segunda fase do jogo
 function startHangman() {
     document.getElementById("game").innerHTML = `
         <div id="hangman-container">
@@ -236,7 +240,7 @@ function showFinalCompletion() {
 
 // Função para iniciar a próxima fase
 function startNextPhase() {
-    alert("A próxima fase será implementada aqui!");
+    showPhaseThreeIntro();
 }
 
 // Função para voltar ao menu
@@ -289,3 +293,117 @@ function showGameOver() {
 }
 
 
+
+
+
+//terceira fase do jogo
+
+function showPhaseThreeIntro() {
+    document.getElementById("game").innerHTML = `
+        <div class="phase-intro">
+            <h1>Atenção! ⚠️</h1>
+            <p>Na próxima fase, você terá um tempo limitado para responder! Cada vida disponível equivale a 30 segundos para tentar acertar.</p>
+            <button onclick="startPhaseThree()">Estou pronto</button>
+        </div>
+    `;
+}
+
+function startPhaseThree() {
+    document.getElementById("game").innerHTML = `
+        <div id="phase-three-container">
+            <h1>Complete a Frase</h1>
+            <p id="hidden-phrase" style="display: none;"><strong>Minha namorada é...</strong></p>
+            <input type="text" id="answer-input" placeholder="Digite a resposta">
+            <button onclick="checkPhaseThreeAnswer()">Responder</button>
+            <p id="timer">Tempo restante: <span id="time-left"></span> segundos</p>
+            <div id="lives-container"></div>
+            <button id="finish-game-button" onclick="showFinalCompletion()" style="display: none;">Finalizar Jogo</button>
+        </div>
+    `;
+
+    // Mostrar a frase somente após iniciar o jogo
+    setTimeout(() => {
+        document.getElementById("hidden-phrase").style.display = "block";
+    }, 500);
+
+    startPhaseThreeTimer();
+    updateLivesDisplay();
+    stylePhaseThreeElements();
+}
+
+let phaseThreeTime;
+let timerInterval;
+
+function startPhaseThreeTimer() {
+    phaseThreeTime = 30; // Cada rodada começa com 30 segundos
+    updateTimerDisplay();
+
+    timerInterval = setInterval(() => {
+        if (phaseThreeTime > 0) {
+            phaseThreeTime--;
+            updateTimerDisplay();
+        } else {
+            // Perde uma vida e reinicia o tempo
+            lives--;
+            updateLivesDisplay();
+
+            if (lives > 0) {
+                phaseThreeTime = 30; // Reinicia o contador
+            } else {
+                clearInterval(timerInterval);
+                document.getElementById("game-over-sound").play();
+                showGameOver();
+            }
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const timerElement = document.getElementById("time-left");
+    timerElement.textContent = phaseThreeTime;
+
+    if (phaseThreeTime <= 10) {
+        timerElement.style.color = "yellow";
+    }
+    if (phaseThreeTime <= 5) {
+        timerElement.style.color = "red";
+        timerElement.style.animation = "pulse 1s infinite";
+    }
+}
+
+function checkPhaseThreeAnswer() {
+    const answer = document.getElementById("answer-input").value.trim().toLowerCase();
+    if (answer === "perfeita") {
+        document.getElementById("correct-sound").play();
+        document.getElementById("finish-game-button").style.display = "block";
+        clearInterval(timerInterval); // Para o timer ao acertar
+    } else {
+        document.getElementById("wrong-sound").play();
+    }
+}
+
+// Estilizar o input e o timer
+function stylePhaseThreeElements() {
+    const input = document.getElementById("answer-input");
+    input.style.width = "80%";
+    input.style.padding = "10px";
+    input.style.fontSize = "20px";
+    input.style.border = "2px solid #ff69b4"; // Rosa vibrante do jogo
+    input.style.borderRadius = "10px";
+    input.style.textAlign = "center";
+    input.style.fontFamily = "'Press Start 2P', cursive"; // Mantendo a fonte do jogo
+
+    const timerElement = document.getElementById("time-left");
+    timerElement.style.fontSize = "24px";
+    timerElement.style.fontWeight = "bold";
+}
+
+// Adicionando a animação de pulsação ao CSS
+const style = document.createElement("style");
+style.innerHTML = `
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
+}`;
+document.head.appendChild(style);
