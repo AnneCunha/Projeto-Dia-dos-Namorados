@@ -4,6 +4,9 @@ body {
     background-image: url("https://i.pinimg.com/originals/ff/22/36/ff2236e2a40e5102820ea2e02ca53e35.gif");
     background-size: cover;
     background-attachment: fixed;
+    position: relative;
+    overflow: hidden; /* Para garantir que os elementos dentro fiquem visíveis */
+    z-index: 1;
 }
 h1{
     font-family: "Silkscreen", sans-serif;
@@ -33,7 +36,8 @@ p{
     max-width: 600px;
     margin: 50px auto;
     background-color: white;
-    padding: 20px;
+    padding-right: 10px;
+    padding-left: 10px;
     border-radius: 10px;
     border: solid;
     border-color: cornflowerblue;
@@ -91,3 +95,57 @@ button {
       "MORF" 15,
       "SHLN" 50;
   }
+
+  .phase-completion {
+    width: 100%;
+    max-width: 500px;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.9);
+    border-radius: 10px;
+    position: relative;
+    /* top: 50%; */
+    left: 5%;
+    /* transform: translate(-50%, -50%); */
+    text-align: center;
+}
+
+
+.phase-completion h1 {
+    font-size: 20px; /* Reduzindo o tamanho do título */
+}
+
+.phase-completion p {
+    font-size: 16px;
+}
+
+.phase-completion .phase-gif {
+    width: 80px; /* Reduzindo o tamanho da imagem */
+    height: auto;
+}
+
+.phase-completion button {
+    padding: 10px 15px;
+    font-size: 14px;
+}
+
+input {
+    padding: 10px;
+    font-size: 15px;
+    border: 2px solid #ff69b4; 
+    border-radius: 10px;
+    text-align: center;
+    font-family: "Silkscreen", sans-serif;
+    color: currentColor;
+}
+
+#time-left{
+    font-size:24px;
+    font-weight: bold;
+}
+
+.life-icon {
+    margin: 5px;
+}
+
+
+

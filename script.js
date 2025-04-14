@@ -151,12 +151,17 @@ function showPhaseCompletion() {
 
 
 // Segunda fase do jogo
+
+const loseLifeSound = new Audio("LoseLife.mp3");
+
+// Função para iniciar a segunda fase
 function startHangman() {
+    document.getElementById("game").innerHTML = ""; // Remove qualquer modal anterior
     document.getElementById("game").innerHTML = `
         <div id="hangman-container">
             <h1>Jogo da Forca</h1>
-            <img src="img/TotoroPixel.gif" class="hangman-gif" style="width: 150px;"> <!-- Reduzi a imagem -->
-            <div id="lives-container"></div> <!-- Onde exibir as vidas -->
+            <img src="img/TotoroPixel.gif" class="hangman-gif" style="width: 150px;">
+            <div id="lives-container"></div>
             <p id="word-display"></p>
             <div id="letter-buttons"></div>
             <p id="incorrect-letters">Letras erradas: </p>
@@ -164,8 +169,13 @@ function startHangman() {
             <button id="finish-game-button" onclick="showFinalCompletion()" style="display: none;">Finalizar Fase</button>
         </div>
     `;
+
+    // Pequeno atraso para garantir que os elementos sejam carregados
     initializeHangman();
+    document.querySelector(".phase-completion").style.display = "none";
+
 }
+
 
 
 function initializeHangman() {
@@ -209,6 +219,7 @@ function guessLetter(letter) {
         document.getElementById("incorrect-letters").textContent = `Letras erradas: ${incorrectLetters.join(", ")}`;
         
         lives--; // Perde uma vida
+        loseLifeSound.play(); 
         updateLivesDisplay();
 
         if (lives === 0) {
@@ -223,7 +234,9 @@ function guessLetter(letter) {
     }
 }
 
-
+    if (!updatedWord.includes("_")) {
+        document.getElementById("finish-game-button").style.display = "block";
+    }
 
 function showFinalCompletion() {
     lives++; // Ganha mais uma vida para a próxima fase
@@ -297,7 +310,10 @@ function showGameOver() {
 
 
 //terceira fase do jogo
+let timeLeft = 30;
+let timerInterval;
 
+// Função para exibir a introdução da terceira fase
 function showPhaseThreeIntro() {
     document.getElementById("game").innerHTML = `
         <div class="phase-intro">
@@ -308,102 +324,103 @@ function showPhaseThreeIntro() {
     `;
 }
 
+// Função para iniciar a terceira fase
 function startPhaseThree() {
+    lives = 3; // Agora só reatribuindo, sem redeclarar
     document.getElementById("game").innerHTML = `
         <div id="phase-three-container">
             <h1>Complete a Frase</h1>
             <p id="hidden-phrase" style="display: none;"><strong>Minha namorada é...</strong></p>
             <input type="text" id="answer-input" placeholder="Digite a resposta">
             <button onclick="checkPhaseThreeAnswer()">Responder</button>
-            <p id="timer">Tempo restante: <span id="time-left"></span> segundos</p>
+            <p id="timer">Tempo restante: <span id="time-left">30</span> segundos</p>
             <div id="lives-container"></div>
             <button id="finish-game-button" onclick="showFinalCompletion()" style="display: none;">Finalizar Jogo</button>
         </div>
     `;
 
-    // Mostrar a frase somente após iniciar o jogo
     setTimeout(() => {
         document.getElementById("hidden-phrase").style.display = "block";
-    }, 500);
-
-    startPhaseThreeTimer();
-    updateLivesDisplay();
-    stylePhaseThreeElements();
+        updateLivesDisplay();
+        stylePhaseThreeElements();
+        startPhaseThreeTimer(); // Inicia o contador
+    }, 100);
 }
 
-let phaseThreeTime;
-let timerInterval;
-
+// Função para iniciar e gerenciar o timer da terceira fase
 function startPhaseThreeTimer() {
-    phaseThreeTime = 30; // Cada rodada começa com 30 segundos
-    updateTimerDisplay();
-
+    clearInterval(timerInterval); // Garante que não há múltiplos timers
     timerInterval = setInterval(() => {
-        if (phaseThreeTime > 0) {
-            phaseThreeTime--;
-            updateTimerDisplay();
-        } else {
-            // Perde uma vida e reinicia o tempo
+        timeLeft--;
+
+        document.getElementById("time-left").textContent = timeLeft;
+
+        if (timeLeft <= 0) {
             lives--;
             updateLivesDisplay();
 
             if (lives > 0) {
-                phaseThreeTime = 30; // Reinicia o contador
+                timeLeft = 30; // Reinicia o tempo para a próxima vida
             } else {
                 clearInterval(timerInterval);
-                document.getElementById("game-over-sound").play();
                 showGameOver();
             }
         }
-    }, 1000);
+    }, 1000); // Executa a cada 1 segundo
 }
 
+
+// Atualiza visualmente o tempo restante
 function updateTimerDisplay() {
-    const timerElement = document.getElementById("time-left");
-    timerElement.textContent = phaseThreeTime;
-
-    if (phaseThreeTime <= 10) {
-        timerElement.style.color = "yellow";
-    }
-    if (phaseThreeTime <= 5) {
-        timerElement.style.color = "red";
-        timerElement.style.animation = "pulse 1s infinite";
+    const timeLeftSpan = document.getElementById("time-left");
+    if (timeLeftSpan) {
+        timeLeftSpan.textContent = timeLeft;
+        timeLeftSpan.style.color = timeLeft <= 5 ? "red" : timeLeft <= 10 ? "yellow" : "white";
     }
 }
 
+// Atualiza a exibição das vidas com corações
+function updateLivesDisplay() {
+    const livesContainer = document.getElementById("lives-container");
+
+    if (livesContainer) {
+        livesContainer.innerHTML = "";
+        for (let i = 0; i < lives; i++) {
+            const lifeImg = document.createElement("img");
+            lifeImg.src = "img/HeartLife.gif";
+            lifeImg.alt = "Vida";
+            lifeImg.classList.add("life-icon");
+            livesContainer.appendChild(lifeImg);
+        }
+    }
+}
+
+// Função para verificar a resposta
 function checkPhaseThreeAnswer() {
     const answer = document.getElementById("answer-input").value.trim().toLowerCase();
     if (answer === "perfeita") {
         document.getElementById("correct-sound").play();
+        clearInterval(timerInterval); // para o timer
         document.getElementById("finish-game-button").style.display = "block";
-        clearInterval(timerInterval); // Para o timer ao acertar
     } else {
         document.getElementById("wrong-sound").play();
     }
 }
 
-// Estilizar o input e o timer
+// Estilo para o input e o timer
 function stylePhaseThreeElements() {
     const input = document.getElementById("answer-input");
     input.style.width = "80%";
     input.style.padding = "10px";
     input.style.fontSize = "20px";
-    input.style.border = "2px solid #ff69b4"; // Rosa vibrante do jogo
+    input.style.border = "2px solid #ff69b4";
     input.style.borderRadius = "10px";
     input.style.textAlign = "center";
-    input.style.fontFamily = "'Press Start 2P', cursive"; // Mantendo a fonte do jogo
+    input.style.fontFamily = "'Press Start 2P', cursive";
 
     const timerElement = document.getElementById("time-left");
     timerElement.style.fontSize = "24px";
     timerElement.style.fontWeight = "bold";
 }
 
-// Adicionando a animação de pulsação ao CSS
-const style = document.createElement("style");
-style.innerHTML = `
-@keyframes pulse {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.1); }
-    100% { transform: scale(1); }
-}`;
-document.head.appendChild(style);
+
