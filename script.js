@@ -37,6 +37,8 @@ let lives = 4;
 let bonusLifeEarned = false;
 let incorrectLetters = [];
 let remainingLives;
+let timerInterval; // usado na fase 3
+let timeLeft = 120; // Tempo de 2 minutos para a fase 3
 
 function startGame() {
     document.getElementById("click-sound").play();
@@ -138,16 +140,13 @@ function showPhaseCompletion() {
     remainingLives = lives;
     document.getElementById("game").innerHTML = `
         <div class="phase-completion">
-            <h1>Parabéns! 🎉 Você completou a primeira fase!</h1>
+            <h1>Parabéns amor! 🎉 Você completou a primeira fase!</h1>
             <img src="img/EstrelaPixel.gif" class="phase-gif">
-            <p>Você ganhou uma vida bônus para a próxima fase!</p>
+            <p>Você ganhou uma vida bônus para a próxima fase! BOA SORTE😈</p>
             <button onclick="startHangman()">Prosseguir</button>
         </div>
     `;
 }
-
-
-
 
 
 // Segunda fase do jogo
@@ -175,8 +174,6 @@ function startHangman() {
     document.querySelector(".phase-completion").style.display = "none";
 
 }
-
-
 
 function initializeHangman() {
     const phrase = "KAKTUS";
@@ -233,18 +230,13 @@ function guessLetter(letter) {
         document.getElementById("finish-game-button").style.display = "block";
     }
 }
-
-    if (!updatedWord.includes("_")) {
-        document.getElementById("finish-game-button").style.display = "block";
-    }
-
 function showFinalCompletion() {
     lives++; // Ganha mais uma vida para a próxima fase
     document.getElementById("game").innerHTML = `
         <div class="phase-completion">
             <h1>Parabéns! 🎉 Você completou a segunda fase!</h1>
             <img src="img/EstrelaPixel.gif" class="phase-gif">
-            <p>Você ganhou mais uma vida!</p>
+            <p>Vamos para a fase final agora!💀</p>
             <button onclick="startNextPhase()">Continuar</button>
         </div>
     `;
@@ -306,36 +298,43 @@ function showGameOver() {
 }
 
 
-
-
-
 //terceira fase do jogo
-let timeLeft = 30;
-let timerInterval;
 
 // Função para exibir a introdução da terceira fase
 function showPhaseThreeIntro() {
     document.getElementById("game").innerHTML = `
         <div class="phase-intro">
             <h1>Atenção! ⚠️</h1>
-            <p>Na próxima fase, você terá um tempo limitado para responder! Cada vida disponível equivale a 30 segundos para tentar acertar.</p>
-            <button onclick="startPhaseThree()">Estou pronto</button>
+            <p>Na próxima fase, você terá 2 minutos para responder! BOA SORTE💀🔥</p>
+            <button id="start-phase-three-btn">Estou pronto</button>
         </div>
     `;
+
+    // Aguarda a renderização e adiciona o evento de clique corretamente
+    setTimeout(() => {
+        const button = document.getElementById("start-phase-three-btn");
+        if (button) {
+            button.addEventListener("click", startPhaseThree);
+        }
+    }, 50);
 }
+
 
 // Função para iniciar a terceira fase
 function startPhaseThree() {
-    lives = 3; // Agora só reatribuindo, sem redeclarar
+    lives = 1; // Mantém 1 vida só para visual (não usaremos ela)
+    timeLeft = 120; // 2 minutos
+
     document.getElementById("game").innerHTML = `
         <div id="phase-three-container">
             <h1>Complete a Frase</h1>
             <p id="hidden-phrase" style="display: none;"><strong>Minha namorada é...</strong></p>
             <input type="text" id="answer-input" placeholder="Digite a resposta">
             <button onclick="checkPhaseThreeAnswer()">Responder</button>
-            <p id="timer">Tempo restante: <span id="time-left">30</span> segundos</p>
+            <p id="timer">Tempo restante: <span id="time-left">120</span> segundos</p>
             <div id="lives-container"></div>
-            <button id="finish-game-button" onclick="showFinalCompletion()" style="display: none;">Finalizar Jogo</button>
+            <button id="finish-game-button" onclick="showFinalMarriageProposal()" style="display: none;">Finalizar Jogo</button>
+
         </div>
     `;
 
@@ -343,67 +342,45 @@ function startPhaseThree() {
         document.getElementById("hidden-phrase").style.display = "block";
         updateLivesDisplay();
         stylePhaseThreeElements();
-        startPhaseThreeTimer(); // Inicia o contador
+        startPhaseThreeTimer(); // Inicia o contador de 2 minutos
     }, 100);
 }
 
-// Função para iniciar e gerenciar o timer da terceira fase
+// Atualiza visualmente o tempo restante
 function startPhaseThreeTimer() {
-    clearInterval(timerInterval); // Garante que não há múltiplos timers
+    clearInterval(timerInterval); // NÃO use "let" aqui
+
     timerInterval = setInterval(() => {
         timeLeft--;
-
-        document.getElementById("time-left").textContent = timeLeft;
+        updateTimerDisplay();
 
         if (timeLeft <= 0) {
-            lives--;
-            updateLivesDisplay();
-
-            if (lives > 0) {
-                timeLeft = 30; // Reinicia o tempo para a próxima vida
-            } else {
-                clearInterval(timerInterval);
-                showGameOver();
-            }
+            clearInterval(timerInterval);
+            document.getElementById("game-over-sound").play();
+            showGameOver();
         }
-    }, 1000); // Executa a cada 1 segundo
+    }, 1000);
 }
 
-
-// Atualiza visualmente o tempo restante
+// Atualiza a exibição das vidas com corações
 function updateTimerDisplay() {
     const timeLeftSpan = document.getElementById("time-left");
     if (timeLeftSpan) {
         timeLeftSpan.textContent = timeLeft;
-        timeLeftSpan.style.color = timeLeft <= 5 ? "red" : timeLeft <= 10 ? "yellow" : "white";
+        timeLeftSpan.style.color = timeLeft <= 10 ? "red" : timeLeft <= 30 ? "orange" : "pink";
     }
 }
 
-// Atualiza a exibição das vidas com corações
-function updateLivesDisplay() {
-    const livesContainer = document.getElementById("lives-container");
-
-    if (livesContainer) {
-        livesContainer.innerHTML = "";
-        for (let i = 0; i < lives; i++) {
-            const lifeImg = document.createElement("img");
-            lifeImg.src = "img/HeartLife.gif";
-            lifeImg.alt = "Vida";
-            lifeImg.classList.add("life-icon");
-            livesContainer.appendChild(lifeImg);
-        }
-    }
-}
 
 // Função para verificar a resposta
 function checkPhaseThreeAnswer() {
     const answer = document.getElementById("answer-input").value.trim().toLowerCase();
     if (answer === "perfeita") {
-        document.getElementById("correct-sound").play();
+        document.getElementById("winner-sound").play();
         clearInterval(timerInterval); // para o timer
         document.getElementById("finish-game-button").style.display = "block";
     } else {
-        document.getElementById("wrong-sound").play();
+        document.getElementById("erro-sound").play();
     }
 }
 
@@ -416,11 +393,51 @@ function stylePhaseThreeElements() {
     input.style.border = "2px solid #ff69b4";
     input.style.borderRadius = "10px";
     input.style.textAlign = "center";
-    input.style.fontFamily = "'Press Start 2P', cursive";
 
     const timerElement = document.getElementById("time-left");
     timerElement.style.fontSize = "24px";
     timerElement.style.fontWeight = "bold";
 }
 
+// Função para exibir a tela de conclusão final
+function showFinalMarriageProposal() {
+  document.getElementById("game").innerHTML = `
+    <h1 class="h1Final">🎉 Você venceu meu coração! 🎉</h1>
+    <img src="img/NossaImg2.png" alt="Nossa Imagem" class="ImgFinal4">
+    <p class="pFinal">Parabéns, amor! Você passou por cada fase, decifrou cada pista e provou que me conhece pixel por pixel.</p>
+    <p class="pFinal">Mas calma... esse não é o fim! É só mais um checkpoint da nossa história juntos. Que venham mil continues, vidas extras e aventuras lado a lado. Eu te amo mais do que qualquer jogo poderia mostrar! 💖</p>
+    <p class="pFinal">E agora... só falta uma última fase:</p>
+    <h2 class="H2Final">Vai me pedir em casamento depois dessa?</h2>
 
+    <div class="final-buttons">
+      <button onclick="showHappyEnding()">SIM, É CLARO!💍✨</button>
+      <button id="no-button-final">Aiiinda Não😱</button>
+    </div>
+  `;
+
+const noButtonFinal = document.getElementById("no-button-final");
+  noButtonFinal.addEventListener("pointerenter", moveNoButtonFinal);
+}
+
+function moveNoButtonFinal() {
+  const button = document.getElementById("no-button-final");
+  const maxX = window.innerWidth - button.clientWidth;
+  const maxY = window.innerHeight - button.clientHeight;
+
+  const newX = Math.floor(Math.random() * maxX);
+  const newY = Math.floor(Math.random() * maxY);
+
+  button.style.position = "absolute";
+  button.style.left = `${newX}px`;
+  button.style.top = `${newY}px`;
+}
+
+function showHappyEnding() {
+  document.getElementById("game").innerHTML = `
+    <h1 class="H1Final">💍✨ Missão Concluída! ✨💍</h1>
+    <p class="pFinal">Pronto! Agora não tem volta... 😂</p>
+    <p class="pFinal">Eu te amo infinitamente, meu amor. Que venham as próximas fases: casa, bichinhos, viagens, café da manhã juntos... e tudo mais que a gente sonhar.</p>
+    <p class="pFinal">Você é meu final feliz, hoje e sempre. ❤️</p>
+    <img src="img/NossaImg1.png" alt="Nossa Imagem" class="ImgFinal">
+  `;
+}
