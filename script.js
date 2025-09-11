@@ -305,7 +305,7 @@ function showPhaseThreeIntro() {
     document.getElementById("game").innerHTML = `
         <div class="phase-intro">
             <h1>Atenção! ⚠️</h1>
-            <p>Na próxima fase, você terá 2 minutos para responder! BOA SORTE💀🔥</p>
+            <p>Na próxima fase, você terá 1 minuto para responder! BOA SORTE💀🔥</p>
             <button id="start-phase-three-btn">Estou pronto</button>
         </div>
     `;
@@ -323,7 +323,7 @@ function showPhaseThreeIntro() {
 // Função para iniciar a terceira fase
 function startPhaseThree() {
     lives = 1; // Mantém 1 vida só para visual (não usaremos ela)
-    timeLeft = 120; // 2 minutos
+    timeLeft = 60; // 1 minutos
 
     document.getElementById("game").innerHTML = `
         <div id="phase-three-container">
@@ -331,7 +331,7 @@ function startPhaseThree() {
             <p id="hidden-phrase" style="display: none;"><strong>Minha namorada é...</strong></p>
             <input type="text" id="answer-input" placeholder="Digite a resposta">
             <button onclick="checkPhaseThreeAnswer()">Responder</button>
-            <p id="timer">Tempo restante: <span id="time-left">120</span> segundos</p>
+            <p id="timer">Tempo restante: <span id="time-left">60</span> segundos</p>
             <div id="lives-container"></div>
             <button id="finish-game-button" onclick="showFinalMarriageProposal()" style="display: none;">Finalizar Jogo</button>
 
@@ -342,7 +342,7 @@ function startPhaseThree() {
         document.getElementById("hidden-phrase").style.display = "block";
         updateLivesDisplay();
         stylePhaseThreeElements();
-        startPhaseThreeTimer(); // Inicia o contador de 2 minutos
+        startPhaseThreeTimer(); // Inicia o contador de 1 minuto
     }, 100);
 }
 
